@@ -168,7 +168,7 @@ A gestão da produção precisa acompanhar, em um só lugar, **quanto foi produz
 
 - Tabela `BaseProdução` com quantidade aprovada, total rejeitado, horas produtivas, horas paradas, operador e data de início.
 - Tabela dedicada `Medidas`, mantendo o modelo organizado e separando cálculos dos dados.
-- Indicadores principais em **cartões com ícones personalizados** (Horas Produtivas, Horas Paradas, Produzido, Rejeitado).
+- Indicadores principais em **cartões com ícones personalizados** (Total Aprovado, Total Rejeitado, Horas Produtivas, Horas Paradas).
 - **Medidores (gauge)** para Disponibilidade e Qualidade, com cores distintas por indicador.
 - **Segmentações** por Operador e por Mês para análise interativa.
 - Identidade visual própria: plano de fundo e ícones desenhados para o relatório.
@@ -275,7 +275,7 @@ O RH precisa entender o **tamanho e o perfil do quadro de funcionários**, a **e
 - **Medidas DAX** para funcionários, funcionários ativos, contratações, demissões e % de turnover.
 - **Duas páginas:** *Dashboard RH* (visão geral) e *Tooltip* (página de dica de ferramenta personalizada, 320×240).
 - **Tooltip personalizado:** ao passar o mouse, exibe Funcionários Ativos, Salário Total e Horas Extras por Cargo.
-- **Visuais customizados** importados para o gráfico de contratações anuais.
+- **Visuais customizados** importados para o cartão de Total Contratações, com minigráfico.
 - **Árvore de decomposição** para explorar o quadro por Área e Cargo.
 
 ### 📈 Principais Métricas
