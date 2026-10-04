@@ -60,7 +60,7 @@ Três projetos de portfólio construídos no Power BI Desktop, cobrindo áreas d
 
 | Projeto | Área | Base de dados | Principais recursos |
 |---|---|---|---|
-| [1. Relatório de Vendas](#-projeto-1--relatório-de-vendas-power-bi) | Comercial | `Base Vendas` | Gráfico combinado, mapa, cartões, filtro Top N |
+| [1. Relatório de Vendas](#-projeto-1--relatório-de-vendas-power-bi) | Comercial | `Base Vendas` | Gráfico combinado, cartões, filtro Top N, gráficos de barras e colunas |
 | [2. Dashboard de Produção (Global)](#-projeto-2--dashboard-de-produção-e-eficiência-operacional-power-bi) | Indústria / Operações | `BaseProdução` + tabela `Medidas` | Medidas DAX, medidores (gauge), segmentações, identidade visual |
 | [3. Dashboard de RH](#-projeto-3--dashboard-de-rh-e-turnover-power-bi) | Pessoas | `BaseFuncionarios` | Tooltip personalizado, visuais customizados, árvore de decomposição |
 
@@ -96,7 +96,7 @@ A área comercial precisa de uma visão única de **quanto está vendendo, de qu
 | **Quantidade Vendida** | Soma das unidades vendidas |
 | **Produto Mais Vendido** | Produto com maior quantidade vendida (filtro Top 1) |
 | **Vendas por Marca** | Quantidade vendida agrupada por marca |
-| **Faturamento por Continente** | Distribuição geográfica do faturamento |
+| **Faturamento por Continente** | Distribuição do faturamento por mercado |
 
 ### 📊 Visualizações Utilizadas
 
@@ -106,7 +106,7 @@ A área comercial precisa de uma visão única de **quanto está vendendo, de qu
 | Cartão: **Produto Mais Vendido** | Produto + filtro Top N por Qtd. Vendida | Destaque do campeão de vendas |
 | Gráfico de barras: **Vendas por Marca** | Marca × Soma de Qtd. Vendida | Ranking de marcas |
 | Gráfico de colunas e linhas | Ano/Mês × Faturamento (colunas) e Qtd. Vendida (linha) | Evolução temporal e relação entre receita e volume |
-| Mapa (Azure Maps) | Continente × Faturamento (tamanho da bolha) | Visão geográfica |
+| Gráfico de colunas: **Faturamento por Continente** | Continente × Faturamento | Comparar mercados |
 
 ### 🧮 Medidas / Agregações
 
@@ -135,12 +135,17 @@ RETURN
     MAXX ( TOPN ( 1, _Tabela, [@Qtd], DESC ), 'Base Vendas'[Produto] )
 ```
 
+### 💡 Principais Resultados
+
+- **Faturamento total de $64,17 Mi** no período de jun/2017 a ago/2019.
+- **DVD M360 Preto** é o produto mais vendido.
+- **Hashtag Toys** lidera em quantidade vendida (162 mil unidades), seguida por Southridge Video (109 mil); Northwind Traders tem o menor volume (7 mil).
+- **América do Norte** é o maior mercado em faturamento (cerca de $33 Mi), à frente de Europa e América do Sul.
+- A linha de quantidade vendida acompanha o faturamento, com um pico no fim de 2017.
+
 ### 🖼️ Prévia do Dashboard
 
-<!-- Para exibir a imagem: suba o print em assets/img e apague a linha de abertura e a linha de fechamento do comentario logo abaixo. -->
-<!--
-![Relatório de Vendas](assets/img/powerbi-vendas.png)
--->
+![Relatório de Vendas](https://raw.githubusercontent.com/EnzoAmorielo/EnzoAmorielo/main/assets/img/powerbi-vendas.png)
 
 ---
 
@@ -174,7 +179,7 @@ A gestão da produção precisa acompanhar, em um só lugar, **quanto foi produz
 |---|---|
 | **Horas Produtivas** | Tempo em que a produção esteve em operação |
 | **Horas Paradas** | Tempo de parada de máquina (downtime) |
-| **Quantidade Aprovada** | Peças aprovadas na inspeção |
+| **Total Aprovado** | Peças aprovadas na inspeção |
 | **Total Rejeitado** | Peças rejeitadas / refugo |
 | **Qtd Produzida** | Volume total produzido (medida DAX) |
 | **Disponibilidade** | Horas produtivas em relação ao tempo total (medida DAX) |
@@ -184,8 +189,8 @@ A gestão da produção precisa acompanhar, em um só lugar, **quanto foi produz
 
 | Visual | Campos | Objetivo |
 |---|---|---|
-| Cartões com ícone | Horas Produtivas, Horas Paradas, Quant. Aprovada, Total Rejeitado | KPIs de produção e perdas |
-| Gráfico de área: **Produção Mensal** | Ano/Mês × Qtd Produzida | Tendência de volume |
+| Cartões com ícone | Total Aprovado, Total Rejeitado, Horas Produtivas, Horas Paradas | KPIs de produção e perdas |
+| Gráfico de área em degraus: **Produção Mensal** | Ano/Mês × Qtd Produzida | Tendência de volume |
 | Medidor: **Disponibilidade** | Medida Disponibilidade | Eficiência de tempo |
 | Medidor: **Qualidade** | Medida Qualidade | Eficiência de qualidade |
 | Segmentações | Operador e Mês | Filtros interativos |
@@ -212,12 +217,14 @@ Qtd Produzida =
 [Qtd Aprovada] + [Qtd Rejeitada]
 
 // ---------- Indicadores de eficiência ----------
+// Conferência com o dashboard: 30.956 ÷ (30.956 + 8.890) = 77,69%
 Disponibilidade =
 DIVIDE (
     [Horas Produtivas],
     [Horas Produtivas] + [Horas Paradas]
 )
 
+// Conferência com o dashboard: 3.084.251 ÷ (3.084.251 + 21.076) = 99,32%
 Qualidade =
 DIVIDE ( [Qtd Aprovada], [Qtd Produzida] )
 
@@ -234,12 +241,16 @@ DIVIDE ( [Qtd Produzida] - [Qtd Produzida Mês Anterior], [Qtd Produzida Mês An
 
 > 💡 **Evolução natural do projeto:** com uma tabela de ocorrências de parada (motivo, início e fim), é possível calcular **MTBF** e **MTTR** e montar um Pareto de motivos. Essa modelagem está detalhada no [Projeto 5 (SQL)](#-projeto-5--data-warehouse-e-queries-de-produtividade-sql).
 
+### 💡 Principais Resultados
+
+- **Disponibilidade de 77,69%**: foram 30.956 horas produtivas contra 8.890 horas paradas.
+- **Qualidade de 99,32%**: 3.084.251 peças aprovadas contra 21.076 rejeitadas.
+- O principal ponto de melhoria está no **tempo parado**, e não no refugo.
+- A produção mensal varia de 169 mil a 318 mil peças, com pico em julho e queda no segundo semestre (setembro e outubro).
+
 ### 🖼️ Prévia do Dashboard
 
-<!-- Para exibir a imagem: suba o print em assets/img e apague a linha de abertura e a linha de fechamento do comentario logo abaixo. -->
-<!--
-![Dashboard de Produção](assets/img/powerbi-producao.png)
--->
+![Dashboard de Produção](https://raw.githubusercontent.com/EnzoAmorielo/EnzoAmorielo/main/assets/img/powerbi-producao.png)
 
 ---
 
@@ -274,7 +285,7 @@ O RH precisa entender o **tamanho e o perfil do quadro de funcionários**, a **e
 | **Funcionários Ativos** | Quadro atual de colaboradores |
 | **Contratações** | Total de admissões (por ano) |
 | **Demissões** | Total de desligamentos |
-| **% Turnover** | Rotatividade do quadro |
+| **% Turnover** | Demissões ÷ total de contratações |
 | **Salário Total** | Soma dos salários |
 | **Horas Extras** | Total de horas extras por cargo |
 
@@ -282,10 +293,10 @@ O RH precisa entender o **tamanho e o perfil do quadro de funcionários**, a **e
 
 | Visual | Campos | Objetivo |
 |---|---|---|
-| Cartões | Contratações, Func. Ativos, Demissões, Turnover | KPIs de pessoas |
-| Visual customizado: **Total Contratações Anual** | Ano da Contratação × Total Contratações | Evolução de admissões |
-| Rosca | Gênero × Funcionários Ativos | Perfil do quadro |
-| Funil | Cidade × Funcionários Ativos | Distribuição por localidade |
+| Cartões | Total Contratações, Ativos, Demissões, % Turnover | KPIs de pessoas |
+| Visual customizado: **Total Contratações** (com minigráfico) | Ano da Contratação × Total Contratações | Evolução de admissões |
+| Rosca: **Funcionários por Gênero** | Gênero × Funcionários Ativos | Perfil do quadro |
+| Funil: **Funcionários por Cidade** | Cidade × Funcionários Ativos | Distribuição por localidade |
 | Árvore de decomposição | Funcionários Ativos explicado por Área e Cargo | Análise exploratória guiada |
 | Tooltip personalizado | Funcionários Ativos, Salário Total, Horas Extras por Cargo | Detalhe sob demanda |
 
@@ -311,12 +322,9 @@ CALCULATE (
     BaseFuncionarios[Status] = "Desligado"
 )
 
-// Turnover = média entre admissões e desligamentos sobre o quadro
+// Conferência com o dashboard: 17 demissões ÷ 234 contratações = 7,26%
 % Turnover =
-DIVIDE (
-    ( [Total Contratacoes] + [Demissoes] ) / 2,
-    [Funcionários]
-)
+DIVIDE ( [Demissoes], [Total Contratacoes] )
 
 Salário Total =
 SUM ( BaseFuncionarios[Salario] )
@@ -325,13 +333,19 @@ Horas Extras Total =
 SUM ( BaseFuncionarios[Horas Extras] )
 ```
 
+### 💡 Principais Resultados
+
+- **234 contratações, 217 funcionários ativos e 17 demissões**, o que resulta em **turnover de 7,26%**.
+- Quadro equilibrado entre gênero: **52,07% masculino e 47,93% feminino**.
+- **São Paulo** concentra o maior número de funcionários (49), seguida por Recife (40) e Rio de Janeiro (28).
+- A área **Administrativo** é a maior (58), e em **Operações** os estagiários são o cargo mais numeroso (14).
+- No tooltip, **estagiários (8.874 h) e analistas (8.067 h)** concentram as horas extras. A folha soma **R$ 1,57 Mi**.
+
 ### 🖼️ Prévia do Dashboard
 
-<!-- Para exibir a imagem: suba o print em assets/img e apague a linha de abertura e a linha de fechamento do comentario logo abaixo. -->
-<!--
-![Dashboard RH](assets/img/powerbi-rh.png)
-![Tooltip RH](assets/img/powerbi-rh-tooltip.png)
--->
+![Dashboard RH](https://raw.githubusercontent.com/EnzoAmorielo/EnzoAmorielo/main/assets/img/powerbi-rh.png)
+
+![Tooltip do Dashboard RH](https://raw.githubusercontent.com/EnzoAmorielo/EnzoAmorielo/main/assets/img/powerbi-rh-tooltip.png)
 
 ---
 
