@@ -10,6 +10,8 @@
 ![DAX](https://img.shields.io/badge/DAX-0078D4?style=for-the-badge&logo=microsoft&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Prompt Engineering](https://img.shields.io/badge/Prompt_Engineering-6E40C9?style=for-the-badge)
+![Automação](https://img.shields.io/badge/Automa%C3%A7%C3%A3o-2E7D32?style=for-the-badge)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
@@ -24,9 +26,11 @@
 
 Sou **Analista de Dados Júnior**, com passagem por **iFood** e **NielsenIQ**, e transformo dados em indicadores confiáveis para apoiar decisões de negócio. Trabalho com **Power BI, Python e SQL**, e neste portfólio mostro projetos de áreas diferentes: **Comercial, Produção e Recursos Humanos**.
 
+Também estudo **IA aplicada a negócios** (trilha *Business AI Builder*, da Oracle Next Education em parceria com a Alura, **em andamento**) e uso LLMs e automação para ganhar tempo e confiabilidade em rotinas analíticas.
+
 Meu fluxo de trabalho cobre o ciclo completo de analytics: **entender o problema de negócio → organizar e modelar os dados → construir métricas (DAX/SQL) → extrair insights → comunicar com dashboards claros**.
 
-> 📌 **Sobre os projetos:** os projetos de **Power BI** são estudos de caso / projetos de portfólio desenvolvidos com bases de dados de portfólio, sem informações confidenciais de empresas. Os projetos de **Python** e **SQL** são estudos de caso **simulados**, com dados sintéticos gerados por script. Todos servem para demonstrar repertório técnico e raciocínio analítico na resolução de problemas de negócio.
+> 📌 **Sobre os projetos:** os projetos de **Power BI** são estudos de caso / projetos de portfólio desenvolvidos com bases de dados de portfólio, sem informações confidenciais de empresas. Os projetos de **Python**, **SQL**, **IA** e **Automação** são estudos de caso **simulados**, com dados sintéticos gerados por script. Todos servem para demonstrar repertório técnico e raciocínio analítico na resolução de problemas de negócio.
 
 ---
 
@@ -37,6 +41,7 @@ Meu fluxo de trabalho cobre o ciclo completo de analytics: **entender o problema
 | **BI & Dataviz** | Power BI Desktop, DAX, Power Query, modelagem dimensional (Star Schema), storytelling com dados, design de dashboards, tooltips e visuais customizados |
 | **Data Analysis & Code** | Python (Pandas, NumPy, Matplotlib, Seaborn, Scikit-Learn), Análise Exploratória (EDA), estatística descritiva e inferencial, engenharia de features, modelos baseline de classificação |
 | **Banco de Dados** | PostgreSQL, BigQuery, SQL avançado (CTEs, Window Functions, agregações complexas), modelagem de Data Warehouse, otimização de consultas |
+| **IA Aplicada & Automação** | Engenharia de prompts, experimentação e avaliação de LLMs via API (Python), automação de rotinas analíticas com Python (Pandas) e VBA, integração Excel–Python |
 | **Metodologias** | Indicadores operacionais e de negócio (disponibilidade, qualidade, MTBF, MTTR, turnover, Pareto), versionamento com Git/GitHub, documentação técnica |
 
 ---
@@ -50,6 +55,8 @@ Meu fluxo de trabalho cobre o ciclo completo de analytics: **entender o problema
 | 3 | [Dashboard de RH e Turnover](#-projeto-3--dashboard-de-rh-e-turnover-power-bi) | Power BI, DAX, visuais customizados | Dashboard |
 | 4 | [Manutenção Preditiva com Python](#-projeto-4--manutenção-preditiva-e-previsão-de-falhas-python) | Python, Scikit-Learn | EDA + ML |
 | 5 | [Data Warehouse e SQL Avançado](#-projeto-5--data-warehouse-e-queries-de-produtividade-sql) | PostgreSQL / BigQuery | SQL |
+| 6 | [Biblioteca de Prompts e Experimentos com LLMs](#-projeto-6--biblioteca-de-prompts-e-experimentos-com-llms-para-análise-de-dados) | Python, API de LLM, Prompt Engineering | IA aplicada |
+| 7 | [Automação de Relatório de Produção](#-projeto-7--automação-de-relatório-de-produção-excel--python) | Python, Pandas, openpyxl | Automação |
 
 
 ---
@@ -894,6 +901,188 @@ ORDER BY ag.linha, ag.mes, rank_turno;
 **Conclusão analítica:** o uso de `RANK()` por linha/mês compara o desempenho entre turnos em base justa (peças por hora produtiva), e a janela `SUM() OVER (PARTITION BY ...)` calcula o atingimento da meta da linha sem uma nova agregação.
 
 > 💡 **Adaptação para BigQuery:** troque `DATE_TRUNC(data, MONTH)` pela sintaxe do BigQuery, use `TIMESTAMP_DIFF(fim, inicio, SECOND) / 3600.0` no lugar de `EXTRACT(EPOCH ...)`, e `SAFE_DIVIDE` em vez de `NULLIF` quando preferir.
+
+---
+
+# 🤖 Projetos de IA Aplicada e Automação
+
+Estes projetos mostram como uso **IA e automação para ganhar tempo e confiabilidade** em rotinas analíticas. Na minha experiência profissional na NielsenIQ, automações em Python e VBA reduziram em aproximadamente **70%** o trabalho manual de rotinas analíticas. Os projetos abaixo reproduzem essa abordagem com **dados sintéticos** e **premissas declaradas**, sem usar informação de nenhuma empresa.
+
+---
+
+## 📌 Projeto 6 — Biblioteca de Prompts e Experimentos com LLMs para Análise de Dados
+
+> **Tipo:** Estudo de caso simulado · **Ferramentas:** Python, API de LLM (SDK da Anthropic), engenharia de prompts
+>
+> 📂 **Código completo:** [ia/prompts-llm](https://github.com/EnzoAmorielo/EnzoAmorielo/tree/main/ia/prompts-llm)
+
+### 🎯 Problema de Negócio (Simulado)
+
+Times de dados usam LLMs para explicar métricas, gerar SQL, triar problemas de qualidade de dados e resumir KPIs. A qualidade das respostas varia muito com a forma como o prompt é escrito, e quase nunca é medida. A pergunta do estudo é: **um prompt estruturado produz respostas mais confiáveis e utilizáveis do que um prompt simples?**
+
+### 🛠️ Solução Desenvolvida
+
+- Biblioteca com **4 tarefas** de análise de dados, cada uma com duas versões: **v1** (prompt simples) e **v2** (prompt estruturado, com papel, contexto, regras e formato).
+- **Checagens automáticas** que medem se a saída é utilizável: formato, limite de tamanho, dados obrigatórios e ausência de números inventados.
+- **Repetições** por prompt e variante (os LLMs variam entre execuções) e gravação de tudo em CSV, com uma coluna para **nota manual** após a leitura humana.
+- Modo `--selftest`, que testa as próprias checagens com respostas boas e ruins, sem chamar a API.
+
+| Tarefa | Técnica aplicada no v2 | Checagens automáticas |
+|---|---|---|
+| Explicar uma medida DAX para gestores | Papel + contexto + regras + formato | Limite de 90 palavras, cita numerador e valores, resultado em %, sem jargão de DAX |
+| Gerar SQL a partir do schema | Few-shot + restrições + saída só em código | Usa só as tabelas do schema, filtra paradas corretivas, usa `AVG`, sem DML e sem markdown |
+| Triagem de qualidade de dados em CSV | Saída estruturada (JSON) + restrição anti-invenção | JSON válido, chave `problemas`, só cita colunas que existem |
+| Resumo executivo de KPIs | Fundamentação nos dados + limite de tamanho + próxima ação | Limite de 80 palavras, cita a disponibilidade, só usa números fornecidos |
+
+### 💻 Exemplo: mesma tarefa, dois prompts
+
+```text
+# v1 - prompt simples
+Explique esta medida DAX: % Turnover = DIVIDE ( [Demissoes], [Total Contratacoes] )
+
+# v2 - prompt estruturado
+[system] Você é um analista de BI sênior que explica métricas para gestores sem formação técnica.
+         Responda em português do Brasil.
+
+Contexto: dashboard de RH em Power BI.
+Medida DAX: % Turnover = DIVIDE ( [Demissoes], [Total Contratacoes] )
+Valores atuais: Demissões = 17; Total de contratações = 234
+
+Tarefa: explique o que a medida calcula.
+Regras:
+- Máximo de 90 palavras.
+- Diga qual é o numerador e qual é o denominador.
+- Inclua a conta com os valores atuais e o resultado em porcentagem.
+- Não use termos técnicos de DAX (como "função" ou "contexto de filtro").
+Formato: um único parágrafo.
+```
+
+### 🔎 Como as respostas são avaliadas
+
+```python
+def aplicar_check(nome, arg, texto, entrada):
+    t = texto or ""
+    if nome == "max_palavras":
+        return len(t.split()) <= int(arg)
+    if nome == "sem":                       # termos proibidos (ex.: DELETE, markdown)
+        return all(p.lower() not in t.lower() for p in arg)
+    if nome == "json_valido":
+        try:
+            json.loads(_limpar_json(t)); return True
+        except (json.JSONDecodeError, TypeError):
+            return False
+    if nome == "so_numeros_fornecidos":     # barreira contra números inventados
+        permitidos = _numeros(entrada["kpis"])
+        return all(n in permitidos or n <= 10 for n in _numeros(t))
+    ...
+```
+
+> ⚠️ **Limite assumido:** as checagens automáticas medem formato, tamanho e fidelidade aos dados fornecidos, mas **não medem a qualidade analítica** da resposta. Por isso o CSV de resultados tem a coluna `nota_manual_1a5`, preenchida depois de ler as respostas.
+
+### ▶️ Como reproduzir
+
+```bash
+pip install anthropic
+export ANTHROPIC_API_KEY="sua-chave"        # Windows (PowerShell): $env:ANTHROPIC_API_KEY="sua-chave"
+
+python avaliar_prompts.py --selftest        # valida as checagens (sem API)
+python avaliar_prompts.py --dry-run         # mostra todos os prompts (sem API)
+python avaliar_prompts.py --repeticoes 3    # roda o experimento e salva resultados/*.csv
+```
+
+O modelo pode ser trocado com a variável de ambiente `MODELO_LLM`.
+
+---
+
+## 📌 Projeto 7 — Automação de Relatório de Produção (Excel → Python)
+
+> **Tipo:** Estudo de caso simulado · **Ferramentas:** Python, Pandas, NumPy, openpyxl · **Opcional:** API de LLM
+>
+> 📂 **Código completo:** [automacao/relatorio-producao](https://github.com/EnzoAmorielo/EnzoAmorielo/tree/main/automacao/relatorio-producao)
+
+### 🎯 Problema de Negócio (Simulado)
+
+Todo mês, a equipe de planejamento recebe uma planilha de produção por mês. Alguém abre cada arquivo, corrige nomes de máquina digitados de formas diferentes, procura quantidades negativas e linhas duplicadas, consolida tudo e monta o relatório de **disponibilidade** e **qualidade**. O trabalho é repetitivo, demorado e sujeito a erro de digitação.
+
+### 🛠️ Solução Desenvolvida
+
+Um pipeline em Python que roda com um comando:
+
+1. **Consolida** as planilhas mensais em uma única tabela.
+2. **Padroniza** nomes de máquina (`cnc 01` e `CNC_01` viram `CNC-01`) e converte valores digitados como texto.
+3. **Valida** as regras de negócio e separa as linhas com erro em uma aba própria.
+4. **Calcula os KPIs** (disponibilidade, qualidade e % de refugo) no total, por máquina e por mês.
+5. **Exporta** um Excel formatado, com resumo executivo, KPIs e a lista de erros.
+6. **Mede o tempo** da automação e compara com uma premissa de tempo manual.
+7. **Opcional:** gera o resumo executivo com um LLM (`--resumo-llm`), reaproveitando o padrão de prompt do Projeto 6.
+
+| Regra de validação | Motivo |
+|---|---|
+| Operador vazio | Impede rastrear o responsável pelo apontamento |
+| Quantidade negativa | Erro de digitação |
+| Valor ausente ou inválido | Impede o cálculo dos KPIs |
+| Horas acima do turno | Soma de horas produtivas e paradas maior que a jornada de 8 horas |
+| Linha duplicada | Mesma data, máquina e turno repetidos (inclui colisões após padronizar o nome da máquina) |
+
+### 💻 Código-chave: validação das regras de negócio
+
+```python
+def validar(df):
+    regras = {
+        "operador vazio": df["operador"].isna() | (df["operador"].astype(str).str.strip() == ""),
+        "quantidade negativa": (df["qtd_aprovada"] < 0) | (df["qtd_rejeitada"] < 0),
+        "valor ausente ou inválido": df[["qtd_aprovada", "qtd_rejeitada", "horas_produtivas", "horas_paradas"]].isna().any(axis=1),
+        "horas acima do turno": (df["horas_produtivas"] + df["horas_paradas"]) > HORAS_TURNO + 0.5,
+        "linha duplicada": df.duplicated(subset=["data", "maquina", "turno"], keep="first"),
+    }
+    erros = pd.DataFrame(regras)
+    df = df.assign(motivo_erro=erros.apply(lambda r: "; ".join(erros.columns[r.values]), axis=1))
+    return df[df["motivo_erro"] == ""].drop(columns="motivo_erro"), df[df["motivo_erro"] != ""], erros.sum()
+```
+
+### 📊 Execução de exemplo (dados sintéticos)
+
+```text
+Planilhas processadas : 12
+Linhas lidas          : 5,100
+Linhas válidas        : 4,936
+Correções automáticas :
+   - nomes de máquina padronizados : 36
+   - valores com texto convertidos : 36
+Linhas com erro       : 164 (3.2%)
+   - operador vazio        : 24
+   - quantidade negativa   : 25
+   - valor ausente ou inválido: 0
+   - horas acima do turno  : 24
+   - linha duplicada       : 92
+
+Disponibilidade       : 77.68%
+Qualidade             : 99.35%
+
+Tempo da automação    : 0.6 s   (medido em um notebook comum)
+Tempo manual (PREMISSA): 180 min (15 min x 12 planilhas)
+Obs.: o tempo manual é uma premissa ajustável (--min-por-planilha), não uma medição.
+```
+
+### ⏱️ Sobre a economia de tempo
+
+O tempo da automação é **medido** pelo script. O tempo manual é uma **premissa ajustável** (15 minutos por planilha, no exemplo, o que dá 180 minutos para 12 planilhas) e pode ser alterado com `--min-por-planilha`. Os números acima **não são um resultado de empresa**: servem para mostrar como estimo ganho de tempo, deixando as premissas explícitas.
+
+### ▶️ Como reproduzir
+
+```bash
+pip install pandas numpy openpyxl
+python automacao_relatorio.py                       # gera dados fictícios na 1ª execução e roda o pipeline
+python automacao_relatorio.py --min-por-planilha 20 # muda a premissa de tempo manual
+```
+
+---
+
+## 🎓 Formação e Cursos
+
+- **Análise e Desenvolvimento de Sistemas** · UniFECAF · em andamento (conclusão prevista em dez/2027)
+- **Programa de Carreira Analista de Dados** · EBAC
+- **Business AI Builder** (IA aplicada a negócios) · Oracle Next Education em parceria com a Alura · **em andamento** (certificado ainda não emitido)
 
 ---
 
