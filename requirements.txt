@@ -1,4 +1,0 @@
-pandas
-numpy
-openpyxl
-anthropic  # opcional: só para --resumo-llm
